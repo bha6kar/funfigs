@@ -1,0 +1,3 @@
+# Baseline for a new Codex installation. Existing settings are preserved.
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"

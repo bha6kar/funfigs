@@ -1,0 +1,142 @@
+# Reference material
+
+Read through the funfigs skill. Its adaptation rules govern workflow, tools, commits and reporting. This file is supporting material, not an independently registered skill.
+
+---
+name: aposd-designing-deep-modules
+description: "Guides module and API design using APOSD principles: generates multiple design alternatives, compares them on information hiding and interface depth, and produces a documented design decision. For creating new module/API design; not for assessing existing designs (use aposd-reviewing-module-design) or routine-level design (use cc-routine-and-class-design)."
+user-invocable: false
+---
+
+# Skill: aposd-designing-deep-modules
+
+## Before Implementing  -  the design-it-twice gate
+
+**Never implement your first design.** Generate 2-3 radically different approaches, compare them, then implement.
+
+---
+
+## Design-It-Twice Workflow
+
+```
+BEFORE implementing any module:
+
+1. DEFINE - What are you designing? (class, API, service)
+2. GENERATE - 2-3 RADICALLY different approaches
+3. SKETCH - Rough outline each (important methods only, no implementation)
+4. COMPARE - List pros/cons, especially ease of use for callers
+5. EVALUATE - Is there a clear winner or hybrid?
+6. VERIFY - Does chosen design pass depth evaluation?
+7. IMPLEMENT - Only then write the code
+```
+
+**If none attractive:** Use identified problems to drive a new iteration of step 2.
+
+---
+
+## Depth Evaluation
+
+| Metric | Deep (Good) | Shallow (Bad) |
+|--------|-------------|---------------|
+| Interface size | Few methods | Many methods |
+| Method reusability | Multiple use cases | Single use case |
+| Hidden information | High | Low |
+| Caller cognitive load | Low | High |
+| Common case | Simple | Complex |
+
+**Exemplar:** Unix file I/O - 5 methods hide hundreds of thousands of lines of implementation.
+
+---
+
+## Three Questions Framework
+
+Ask these when designing interfaces:
+
+| Question | Purpose | Red Flag Answer |
+|----------|---------|-----------------|
+| "What is the simplest interface that covers all current needs?" | Minimize method count | "I need many methods" |
+| "In how many situations will this method be used?" | Detect over-specialization | "Just this one situation" |
+| "Is this easy to use for my current needs?" | Guard against over-generalization | "I need lots of wrapper code" |
+
+---
+
+## Information Hiding Checklist
+
+When embedding functionality in a module:
+
+- [ ] Data structures and algorithms stay internal
+- [ ] Lower-level details (page sizes, buffer sizes) hidden
+- [ ] Higher-level assumptions (most files are small) hidden
+- [ ] No knowledge shared across module boundaries unnecessarily
+- [ ] Common case requires no knowledge of internal details
+
+---
+
+## Generality Sweet Spot
+
+**Target:** Somewhat general-purpose
+
+| Aspect | Should Be |
+|--------|-----------|
+| Functionality | Reflects current needs |
+| Interface | Supports multiple uses |
+| Specialization | Pushed up to callers OR down into variants |
+
+**Push specialization UP:** Top-level code handles specific features; lower layers stay general.
+
+**Push specialization DOWN:** Define general interface, implement with device-specific variants.
+
+---
+
+## Red Flags
+
+| Red Flag | Symptom | Fix |
+|----------|---------|-----|
+| **Shallow Module** | Interface complexity rivals implementation | Combine with related functionality |
+| **Classitis** | Many small classes with little functionality each | Consolidate related classes |
+| **Single-Use Method** | Method designed for exactly one caller | Generalize to handle multiple cases |
+| **Information Leakage** | Same knowledge in multiple modules | Consolidate in single module |
+| **Temporal Decomposition** | Structure mirrors execution order | Structure by knowledge encapsulation |
+| **False Abstraction** | Interface hides info caller actually needs | Expose necessary information |
+| **Granularity Mismatch** | Caller must do work that belongs in module | Move logic into module |
+| **Silent Failure** | Module handles errors internally but gives callers no way to know something went wrong (no error return, no observable state change, no logging) | Errors are implementation details that can be hidden; failures are not  -  surface failure states even when hiding the mechanism |
+
+---
+
+## Mandatory Output Format
+
+When designing, produce:
+
+```
+## Design: [Component Name]
+
+### Approaches Considered
+1. [Approach A] - [1-2 sentence description]
+2. [Approach B] - [1-2 sentence description]
+3. [Approach C] - [1-2 sentence description] (if applicable)
+
+### Comparison
+| Criterion | A | B | C |
+|-----------|---|---|---|
+| Interface simplicity | | | |
+| Information hiding | | | |
+| Caller ease of use | | | |
+| [Domain-specific criterion] | | | |
+
+### Choice: [A/B/C/Hybrid]
+Rationale: [Why this wins, what's sacrificed]
+
+### Depth Check
+- Interface methods: [count]
+- Hidden details: [list]
+- Common case complexity: [simple/moderate/complex]
+```
+
+
+---
+
+## Chain
+
+| After | Next |
+|-------|------|
+| Design chosen | `Skill(funfigs:cc-pseudocode-programming)` |

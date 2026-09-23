@@ -1,0 +1,8 @@
+{
+  "theme": "dark",
+  "inputNeededNotifEnabled": true,
+  "agentPushNotifEnabled": true,
+  "permissions": {
+    "allow": ["WebSearch"]
+  }
+}

@@ -1,0 +1,79 @@
+# Reference material
+
+Read through the funfigs skill. Its adaptation rules govern workflow, tools, commits and reporting. This file is supporting material, not an independently registered skill.
+
+# Adaptive Questioning
+
+How to question the user without changing what you need to know  -  only what they have to type.
+
+Used by `clarify` and any plan gate that asks the user a question (`AskUserQuestion`, free-form, or option-list).
+
+---
+
+## Channel Selection: Dialog vs Conversation
+
+Pick the channel by what the user must *see* to answer:
+
+- **`AskUserQuestion`**  -  decisive choices with 2-4 short, self-contained options (auth method, library, approach A/B). The option labels and descriptions carry everything needed to choose.
+- **Conversation markdown, free-form reply**  -  anything the user must review before answering: plan summaries, phase skeletons, problem statements, approach comparisons, any multi-section artifact. Dialog previews truncate multi-phase content, so a checkpoint carried in a dialog asks the user to confirm something they cannot fully see. Render the artifact as the turn's **final message** (no tool calls after it) and ask the question in the same message; the user answers in their own words.
+
+Never split one checkpoint across both channels  -  a dialog after a rendered artifact re-introduces the risk that the render gets skipped and the dialog becomes the only (truncated) surface.
+
+---
+
+## Two Modes
+
+**Exploratory (default).** Open-ended questions targeting the axis of disagreement between hypotheses. The user provides the answer.
+
+**Confirmatory.** You still ask every question you need answered  -  but you supply your best-guess answer and let the user confirm or correct. The completeness bar usually does not change. Only the cost to the user drops.
+
+| Exploratory | Confirmatory equivalent |
+|-------------|------------------------|
+| "What should happen when the input is empty?" | "I'm assuming empty input returns 400 with a validation error  -  correct?" |
+| "Should this be async or sync?" | "This looks I/O-bound, so I'll make it async unless you say otherwise." |
+| "Which auth flow  -  OAuth, email/password, SSO?" | "I'll go with OAuth since the codebase already has the provider configured. Push back if you want something different." |
+
+---
+
+## When to Switch
+
+**To confirmatory:** short or terse replies, "just do it," "whatever works," "I don't care," answering a multi-part question with one word, expressing impatience. Don't wait for explicit frustration  -  early signals are enough.
+
+**Back to exploratory:** the user gives a detailed, engaged answer to a confirmatory question; volunteers new context unprompted; asks you to slow down or explore options.
+
+The transition is per-conversation, not permanent. Read the room each turn.
+
+---
+
+## Inside `AskUserQuestion`
+
+Confirmatory mode still works inside the structured tool  -  encode your assumption in the option labels and ordering:
+
+- Make your recommended option the first or clearly-labeled choice: `"Use JWT (my recommendation  -  codebase is stateless)"`
+- Keep the other real options selectable so the user can override without typing.
+- Keep an "Elaborate" / "Different direction" escape hatch when stakes are high.
+- Hold to 2-4 options. Needing more than 4 usually means the question is really a content review  -  move it to conversation (Channel Selection above).
+
+This preserves the gate (user still answers) while collapsing the cognitive load.
+
+---
+
+## Honest Caveat
+
+The "bar doesn't change" claim is *usually* true but not absolute. On genuinely low-stakes calls, "just do it" can mean *the user is accepting a lower correctness bar in exchange for speed*. Don't manufacture questions to satisfy a checklist when the user has explicitly traded rigor for velocity. Use judgment:
+
+- **High stakes** (irreversible action, security, data loss, architectural lock-in)  to  keep every question, just switch to confirmatory.
+- **Low stakes** (cosmetic choice, easily reversible, one of several valid options)  to  drop the question entirely.
+
+When uncertain, prefer confirmatory over silent assumption.
+
+---
+
+## Anti-Patterns
+
+| Pattern | Problem | Instead |
+|---------|---------|---------|
+| Going silent on "just do it" | Hidden assumptions ship without review | Switch mode, state the assumption, let them object |
+| Asking the same question after the user typed "whatever" | Ignores the signal | Confirmatory  -  supply the answer |
+| Confirmatory questions phrased as leading statements | "I assume you want X, right?" with no real out | Offer the alternative: "X unless you'd rather Y" |
+| Permanent mode lock | Reading the user once and never re-reading | Re-evaluate each turn; engagement can return |

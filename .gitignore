@@ -1,0 +1,24 @@
+.DS_Store
+.venv/
+__pycache__/
+*.pyc
+.env
+.env.*
+*.local.json
+backups/
+history.jsonl
+projects/
+sessions/
+credentials.json
+.credentials.json
+
+# Private global instructions and their optional local snapshot.
+/shared/AGENTS.md
+/funfigs-claude-template.md
+
+# Restricted third-party bundles stay local, including on private remotes.
+/skills/docx/
+/skills/pdf/
+/skills/pptx/
+/skills/xlsx/
+/skills/skill-creator/
