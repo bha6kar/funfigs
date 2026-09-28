@@ -19,6 +19,10 @@ For small, well-defined changes we work directly. For uncertain or cross-cutting
 | Implement, test, refactor or migrate existing behaviour | [Changes](references/changes.md) |
 | Investigate failures or review correctness | [Evidence](references/evidence.md) |
 | Measure performance or assess operational reliability | [Operations](references/operations.md) |
+| Finish an implementation, including neglected user-facing states (`ff finish`) | [Finish](references/finish.md) |
+| Challenge and revise a proposed plan (`ff review-plan`) | [Plan review](references/review-plan.md) |
+| Polish wording or match our voice (`ff polish`) | [Writing polish](references/polish.md) |
+| Check local installation health (`ff doctor`) | [Setup health](references/doctor.md) |
 
 ## Working agreement
 

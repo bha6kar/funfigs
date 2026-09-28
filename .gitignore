@@ -15,6 +15,7 @@ credentials.json
 # Private global instructions and their optional local snapshot.
 /shared/AGENTS.md
 /funfigs-claude-template.md
+/.local/
 
 # Restricted third-party bundles stay local, including on private remotes.
 /skills/docx/

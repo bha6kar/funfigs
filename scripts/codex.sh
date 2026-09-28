@@ -1,4 +1,4 @@
 #!/bin/sh
 set -eu
 CONFIG_REPO=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
-exec codex --add-dir "$CONFIG_REPO" "$@"
+exec uv run --offline --no-project "$CONFIG_REPO/scripts/launch.py" codex "$@"

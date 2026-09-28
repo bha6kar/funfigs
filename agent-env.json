@@ -1,0 +1,7 @@
+{
+  "UV_NO_PROGRESS": "1",
+  "npm_config_progress": "false",
+  "npm_config_fund": "false",
+  "npm_config_update_notifier": "false",
+  "GIT_TERMINAL_PROMPT": "0"
+}

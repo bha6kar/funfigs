@@ -20,9 +20,15 @@ The installer preserves existing settings and backs up replaced files. We grant 
 - `ff plan this feature`
 - `ff review my changes`
 - `ff debug this error`
+- `ff finish this feature`
+- `ff review-plan`
+- `ff polish this message`
+- `ff doctor`
 - `Use funfigs-memory to remember this decision for both agents`
 
 `ff` is a shared prompt shorthand for the engineering skill, not a registered slash command. Company skills stay separately managed and are not combined unless requested.
+
+We use [agent experience setup](docs/agent-experience.md) for the coloured Claude context bar, native Codex CLI footer, quiet tool environment and optional local work/personal launch profiles. These settings are activated locally, not by committing our private client configuration.
 
 ## Contents
 
